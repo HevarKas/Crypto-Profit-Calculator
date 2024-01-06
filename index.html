@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Profit Calculator</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f0f0f0;
+        text-align: center;
+        margin: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        max-width: 400px;
+        margin: auto;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      p {
+        margin-top: 20px;
+        font-size: 18px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Crypto Profit Calculator</h1>
+
+    <label for="coinName">Cryptocurrency Name: </label>
+    <input type="text" id="coinName" required />
+
+    <label for="coinPrice">Current Coin Price ($): </label>
+    <input type="number" id="coinPrice" step="0.01" required />
+
+    <label for="investment">Your Investment ($): </label>
+    <input type="number" id="investment" step="0.01" required />
+
+    <label for="targetPrice">Target Coin Price ($): </label>
+    <input type="number" id="targetPrice" step="0.01" required />
+
+    <label for="buyingFee">Buying Fee (%): </label>
+    <input type="number" id="buyingFee" step="0.01" required />
+
+    <label for="sellingFee">Selling Fee (%): </label>
+    <input type="number" id="sellingFee" step="0.01" required />
+
+    <button onclick="calculateProfit()">Calculate Profit</button>
+
+    <p id="result"></p>
+
+    <script>
+      function calculateProfit() {
+        var coinName = document.getElementById("coinName").value;
+        var coinPrice = parseFloat(document.getElementById("coinPrice").value);
+        var investment = parseFloat(
+          document.getElementById("investment").value
+        );
+        var targetPrice = parseFloat(
+          document.getElementById("targetPrice").value
+        );
+        var buyingFee = parseFloat(document.getElementById("buyingFee").value);
+        var sellingFee = parseFloat(
+          document.getElementById("sellingFee").value
+        );
+
+        if (
+          coinPrice < 0 ||
+          investment < 0 ||
+          targetPrice < 0 ||
+          buyingFee < 0 ||
+          sellingFee < 0 ||
+          buyingFee > 100 ||
+          sellingFee > 100
+        ) {
+          alert(
+            "Please enter valid positive numbers and ensure fees are between 0% and 100%."
+          );
+          return;
+        }
+
+        var buyingFeeAmount = (buyingFee / 100) * investment;
+        var sellingFeeAmount =
+          (sellingFee / 100) * ((investment / coinPrice) * targetPrice);
+
+        var coinsOwned = investment / coinPrice;
+        var currentWorth = coinsOwned * coinPrice;
+        var targetWorth = coinsOwned * targetPrice - sellingFeeAmount;
+        var profit = targetWorth - currentWorth - buyingFeeAmount;
+
+        document.getElementById("result").innerHTML =
+          "If you sell " +
+          coinName +
+          " at $" +
+          targetPrice +
+          " per coin, your profit will be $" +
+          profit.toFixed(2);
+      }
+    </script>
+  </body>
+</html>
